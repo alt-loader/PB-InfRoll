@@ -57,3 +57,6 @@ if plr.Character then
 end
 
 plr.CharacterAdded:Connect(bypass)
+-- I am not responsible for any consequences resulting from the use of this script. 
+-- Using this software is unfair to other players and may lead to a permanent ban for exploiting.
+-- Thanks for choosing my scripts! Stay updated and get more here: https://t.me/+13zaI4XqezsyNTMy
