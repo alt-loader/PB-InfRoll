@@ -1,0 +1,59 @@
+local plr = game.Players.LocalPlayer
+
+local function bypass(char)
+	if not char then return end
+	
+	local roll = char:WaitForChild("RollScript")
+	local move = char:WaitForChild("MovementV2")
+	local cd = roll:WaitForChild("Cooldown")
+	
+	local speeds = move:WaitForChild("Walkspeeds")
+	local base = speeds:WaitForChild("BaseSpeeds")
+	
+	local ws = base:WaitForChild("WalkSpeed")
+	local sprint = base:WaitForChild("SprintSpeed")
+	local crouch = base:WaitForChild("CrouchSpeed")
+	
+	local def_ws = ws.Value
+	local def_spr = sprint.Value
+	local def_cr = crouch.Value
+	
+	local active = false
+	local event
+	
+	event = cd.Changed:Connect(function(val)
+		if not char.Parent or not roll.Parent then
+			event:Disconnect()
+			return
+		end
+		
+		if val and not active then
+			active = true
+			task.wait(0.5)
+			
+			ws.Value = def_ws
+			sprint.Value = def_spr
+			crouch.Value = def_cr
+			
+			local offsets = speeds:FindFirstChild("SpeedOffsets")
+			if offsets then offsets:ClearAllChildren() end
+			
+			local rolling = roll:FindFirstChild("Rolling")
+			if rolling then rolling.Value = false end
+			
+			cd.Value = false
+			
+			roll.Disabled = true
+			task.wait()
+			roll.Disabled = false
+			
+			active = false
+		end
+	end)
+end
+
+if plr.Character then 
+	task.spawn(bypass, plr.Character) 
+end
+
+plr.CharacterAdded:Connect(bypass)
